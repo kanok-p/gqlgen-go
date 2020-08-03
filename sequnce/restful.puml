@@ -1,0 +1,34 @@
+@startuml
+
+participant client
+participant schema
+participant resolver
+participant repository
+participant helper
+participant "RESTful API" as rest
+
+client -> schema: handler.NewDefaultServer(schema)
+activate schema
+schema -> resolver: generated.NewExecutableSchema(gqlConfig)
+activate resolver
+resolver -> repository: graph.Resolver{Repo: repo}
+activate repository
+repository -> helper: CURL(method string, url string, opts ...CURLOption) (interface{}, error)
+activate helper
+helper -> rest: client.Do(req)
+activate rest
+helper <- rest: data
+deactivate rest
+repository <- helper: data
+deactivate helper
+resolver <- repository: data
+deactivate repository
+schema <- resolver: data
+deactivate resolver
+client <- schema: data
+deactivate schema
+
+
+skinparam monochrome true
+hide footbox
+@enduml

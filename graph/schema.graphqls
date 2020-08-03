@@ -1,0 +1,40 @@
+input PaginationInput {
+    limit: Int
+    offset: Int
+}
+
+input createInput  {
+    name: String!
+}
+
+input updateInput  {
+    id: String!
+    name: String!
+}
+
+type Response  {
+    id: String!
+    name: String!
+}
+
+type ResponseList {
+    total: Int
+    response: [Response]!
+}
+
+type Pagination {
+    total: Int
+    nextPage: String
+    previousPage: String
+}
+
+type Query {
+    list(input: PaginationInput): ResponseList!
+    read(input: ID!): Response!
+}
+
+type Mutation {
+    create(input: createInput): Response!
+    update(input: updateInput): Response!
+    delete(input: String!): Response!
+}

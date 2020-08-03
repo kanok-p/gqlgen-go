@@ -1,0 +1,30 @@
+@startuml
+
+participant client
+participant schema
+participant resolver
+participant repository
+
+database database
+
+client -> schema: handler.NewDefaultServer(schema)
+activate schema
+schema -> resolver: generated.NewExecutableSchema(gqlConfig)
+activate resolver
+resolver -> repository: graph.Resolver{Repo: repo}
+activate repository
+repository -> database: query database
+activate database
+repository <- database: data
+deactivate database
+resolver <- repository: data
+deactivate repository
+schema <- resolver: data
+deactivate resolver
+client <- schema: data
+deactivate schema
+
+
+skinparam monochrome true
+hide footbox
+@enduml
